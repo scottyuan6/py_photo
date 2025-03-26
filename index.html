@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传图片识别人像</title>
+</head>
+<body>
+    <h2>自动识别主要人物并去除其他人</h2>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file" accept="image/*" required />
+        <button type="submit">上传并处理</button>
+    </form>
+    <br>
+    <div id="result"></div>
+
+    <script>
+    document.getElementById("upload-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById("file-input");
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        const response = await fetch("/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const blob = await response.blob();
+        const imageURL = URL.createObjectURL(blob);
+        document.getElementById("result").innerHTML = "<h3>处理结果：</h3><img src='" + imageURL + "' style='max-width: 100%; height: auto;' />";
+    });
+    </script>
+</body>
+</html>
